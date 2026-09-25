@@ -23,78 +23,60 @@ class FirstProject extends StatefulWidget {
 }
 
 class _FirstProjectState extends State<FirstProject> {
-  int index = 0;
-  List hadith = [
-    {
-      "line1": "عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ",
+  String myName = "";
+  final myController = TextEditingController();
 
-      "line2": "المسلم أخو المسلم؛ لا يظلمه، ولا يَحقره، ولا يخذله",
-    },
-    {
-      "line1": "عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو رَضِيَ اللَّهُ عَنْهُمَا",
-      "line2":
-          "أنَّ رَجُلًا سَأَلَ النَّبِيَّ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ: أَيُّ الإِسْلاَمِ خَيْرٌ؟ قَالَ: «تُطْعِمُ الطَّعَامَ، وَتَقْرَأُ السَّلاَمَ عَلَى مَنْ عَرَفْتَ وَمَنْ لَمْ تَعْرِفْ»",
-    },
-    {
-      "line1": " عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ",
-      "line2": "الكلمة الطيبة صدقة",
-    },
-  ];
-
-  void changeIndex(String direction) {
-    if (direction == "right") {
+  void myfunc() {
       setState(() {
-        if (index == hadith.length - 1) {
-          index = 0;
-        } else {
-          index++;
-        }
+        myName = myController.text;
       });
-    } else if (direction == "left") {
-      setState(() {
-        if (index == 0) {
-          index = hadith.length - 1;
-        } else {
-          index--;
-        }
-      });
-    }
   }
+
+
+  @override
+  void initState() {
+  super.initState();
+
+  // Start listening to changes.
+  myController.addListener(myfunc);
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        width: double.infinity,
-
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(hadith[index]["line1"], style: TextStyle(fontSize: 11)),
-            SizedBox(height: 25),
-            Text(hadith[index]["line2"], style: TextStyle(fontSize: 16)),
-            SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    changeIndex("left");
-                  },
-                  child: Icon(Icons.arrow_left, size: 50),
-                ),
-                SizedBox(width: 40),
-                FloatingActionButton(
-                  onPressed: () {
-                    changeIndex("right");
-                  },
-                  child: Icon(Icons.arrow_right, size: 50),
-                ),
-              ],
-            ),
-          ],
+      appBar: AppBar(
+        title: Text(
+          "Handle changes to a text field",
+          style: TextStyle(fontSize: 22),
         ),
+      ),
+
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(22),
+            child: TextField(
+              controller: myController,
+              decoration: InputDecoration(hintText: "Enter Your Name"),
+            ),
+          ),
+
+          SizedBox(height: 30),
+
+          ElevatedButton(
+            onPressed: () {
+              myfunc();
+            },
+
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+            ),
+            child: Text("Click here", style: TextStyle(fontSize: 22)),
+          ),
+
+          SizedBox(height: 40),
+          Text("My Name is :  $myName    ", style: TextStyle(fontSize: 27)),
+        ],
       ),
     );
   }
